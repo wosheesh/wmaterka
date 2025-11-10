@@ -1,34 +1,33 @@
-# Personal Website
+# Personal Website - Jekyll
 
-A personal website for Wojtek Materka, designed to be hosted on GitHub Pages.
+A personal website for Wojtek Materka, built with Jekyll and hosted on GitHub Pages.
 
 ## Structure
 
-- `index.html` - Homepage
-- `teaching.html` - Teaching & Workshops page
-- `speakingwriting.html` - Speaking & Writing page
-- `about.html` - CV/About page
+- `index.md` - Homepage
+- `teaching.md` - Teaching & Workshops page
+- `speaking.md` - Speaking page
+- `writing.md` - Writing page
+- `about.md` - About/CV page
+- `_layouts/default.html` - Base Jekyll layout
+- `_includes/header.html` - Site header with navigation
+- `_includes/footer.html` - Site footer
 - `css/style.css` - Main stylesheet
-- `js/` - JavaScript directory (for future enhancements)
+- `js/main.js` - JavaScript file (for future enhancements)
+- `_config.yml` - Jekyll configuration
 
 ## Setup for GitHub Pages
 
 ### Initial Setup
 
-1. **Create a GitHub repository**
-   - Create a new repository on GitHub (e.g., `wmaterka.github.io` or your chosen repository name)
-
-2. **Push your files**
+1. **Push your files to GitHub**
    ```bash
-   git init
    git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-   git push -u origin main
+   git commit -m "Migrate to Jekyll"
+   git push
    ```
 
-3. **Enable GitHub Pages**
+2. **Enable GitHub Pages**
    - Go to your repository on GitHub
    - Click on **Settings**
    - Scroll down to **Pages** in the left sidebar
@@ -36,7 +35,7 @@ A personal website for Wojtek Materka, designed to be hosted on GitHub Pages.
    - Choose **main** branch and **/ (root)** folder
    - Click **Save**
 
-4. **Access your site**
+3. **Access your site**
    - Your site will be available at: `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`
    - If your repository is named `YOUR_USERNAME.github.io`, it will be available at: `https://YOUR_USERNAME.github.io/`
    - It may take a few minutes for the site to be available after first deployment
@@ -51,42 +50,52 @@ git commit -m "Update website"
 git push
 ```
 
-GitHub Pages will automatically rebuild and deploy your site.
+GitHub Pages will automatically rebuild and deploy your site using Jekyll.
 
-## Custom Domain (Optional)
+## Custom Domain
 
-If you want to use a custom domain (e.g., `www.wmaterka.com`):
-
-1. Add a `CNAME` file to the root of your repository with your domain name:
-   ```
-   www.wmaterka.com
-   ```
-
-2. Configure DNS settings with your domain provider:
-   - Add a CNAME record pointing `www` to `YOUR_USERNAME.github.io`
-   - Or add an A record pointing to GitHub Pages IP addresses
-
-3. In GitHub repository Settings > Pages, add your custom domain
-
-## Notes
-
-- The CV PDF link in `about.html` currently points to `/s/Wojtek-Materka-CV-05_2025.pdf`. You'll need to add this file to your repository in an `s/` directory, or update the link to point to the correct location.
-- All external links (LinkedIn, articles, etc.) are preserved from the original site.
-- The site uses Inter font from Google Fonts as a free alternative to Aktiv Grotesk.
-- The site is fully responsive and works on mobile, tablet, and desktop devices.
+The site uses a custom domain (`wmaterka.com`) configured via the `CNAME` file. This is automatically handled by GitHub Pages.
 
 ## Local Development
 
-To preview the site locally:
+To preview the site locally with Jekyll:
 
-1. Simply open `index.html` in your web browser, or
-2. Use a local server:
+1. **Install Jekyll** (if not already installed):
    ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Node.js (with http-server)
-   npx http-server
+   gem install bundler jekyll
    ```
-   Then visit `http://localhost:8000` in your browser.
 
+2. **Install dependencies** (if using a Gemfile):
+   ```bash
+   bundle install
+   ```
+
+3. **Serve the site locally**:
+   ```bash
+   bundle exec jekyll serve
+   # or simply:
+   jekyll serve
+   ```
+
+4. **View the site**:
+   - Open your browser and visit `http://localhost:4000`
+   - The site will automatically reload when you make changes
+
+## Jekyll Structure
+
+- **Pages**: All content pages are in Markdown (`.md`) format with YAML front matter
+- **Layouts**: The `_layouts/default.html` file contains the base HTML structure
+- **Includes**: Reusable components (header, footer) are in the `_includes/` directory
+- **Configuration**: Site settings are in `_config.yml`
+
+## Notes
+
+- The CV PDF link in `about.md` points to `/s/Wojtek-Materka-CV-05_2025.pdf`. Ensure this file exists in your repository.
+- All external links (LinkedIn, articles, etc.) are preserved.
+- The site uses Inter font from Google Fonts.
+- The site is fully responsive and works on mobile, tablet, and desktop devices.
+- Active navigation links are handled by Jekyll Liquid templating in `_includes/header.html`.
+
+## Migration Notes
+
+This site was migrated from static HTML to Jekyll. The old HTML files (`index.html`, `teaching.html`, etc.) can be removed after verifying the Jekyll site works correctly.

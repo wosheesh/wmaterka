@@ -1,0 +1,29 @@
+# Site Configuration
+title: "Wojtek Materka"
+description: "Working at the intersection of development and systems change"
+url: "https://wmaterka.com"
+baseurl: ""
+
+# GitHub Pages Settings
+# Note: GitHub Pages includes jekyll-seo-tag by default
+# For additional plugins, create a Gemfile
+
+# Build Settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Site Author
+author:
+  name: "Wojtek Materka"
+  email: "w.materka@insead.edu"
+  linkedin: "https://www.linkedin.com/in/wmaterka/"
+
