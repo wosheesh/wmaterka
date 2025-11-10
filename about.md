@@ -4,9 +4,12 @@ title: "About — Wojtek Materka"
 description: "About - Wojtek Materka"
 ---
 
+<div class="page-header">
+    <h2>About me</h2>
+</div>
+
 <div class="section">
-    <h3>About me</h3>
-    <p>If you are after my academic CV <a href="/s/Wojtek-Materka-CV-05_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>.</p>
+    <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>.</p>
     <p>If you're curious about the person behind it, here's a more personal picture, unfinished and evolving.</p>
     <p>Much of my life has been shaped by moving across geographies and cultures. I've lived and worked on four continents and in seven countries. Early on, I thought adaptation was survival. Later I began to sense it was also a form of inquiry into people, systems, and how meaning is made across shifting terrains.</p>
     <p>"Along the way, I've worked as an executive and a consultant, led teams, and stewarded organisational transformations and international expansions. I've helped organisations rethink not just what they do, but how they see. Before all that, I waited tables in Las Vegas, answered phones on a suicide hotline, and laboured as a construction worker - all roles that offered a different kind of intelligence: how to listen, how to notice what's unspoken, how to stay human and humble in the face of life."</p>
