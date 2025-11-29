@@ -11,9 +11,13 @@ description: "Writing - Wojtek Materka"
 <div class="section">
     <div>
         <h4>Articles & Essays</h4>
-        <p>"My personal reflections where I don't shy away from philosophical inquiry and occasionally mix a dash of practical advice. I explore the complex intersection of leadership, human nature, art, design and technology in a rapidly evolving world:"</p>
+        <p>My personal reflections where I don't shy away from philosophical inquiry and occasionally mix a dash of practical advice. I explore the complex intersection of leadership, human nature, art, design and technology in a rapidly evolving world:</p>
         
         <ul class="articles-list">
+            <li>
+                <a href="https://trust.substack.com/p/the-emotional-geometry-of-organisations" target="_blank" rel="noopener noreferrer">The Emotional Geometry of Organisations</a>
+                <span class="date">- July, 2025</span>
+            </li>
             <li>
                 <a href="https://open.substack.com/pub/trust/p/freedom-envy-and-the-price-of-meaningful?r=wkmf&utm_campaign=post&utm_medium=web&showWelcomeOnShare=false" target="_blank" rel="noopener noreferrer">Freedom, Envy, and the Price of Meaningful Work</a>
                 <span class="date">- June, 2025</span>
