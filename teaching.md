@@ -13,11 +13,10 @@ description: "Teaching & Workshops - Wojtek Materka"
 </div>
 
 <div class="section">
-    <h4>At my core, I am an educator, and my main concern is development of wise and effective leaders.</h4>
-    <h4>Having lived across geographies and having experienced different times and political systems and organisational cultures in my lifetime, I believe that development of conscious and effective leaders is key to growing our capacity to meet and live with the complex and global problems we face.</h4>
-    <h4>Teaching, and especially focusing on topics around leadership, learning and development, is the way I contribute to humanity finding a way through these issues.</h4>
-    <p>Drawing on interdisciplinary research and my own broad professional and personal experiences, I connect with diverse audiences across cultures, organizations, and sectors. Participants describe my teaching as engaging and insightful; they experience me as challenging yet empathetic, passionate yet thoughtful, wise yet playful.</p>
-    <p>My work has been recognized with multiple awards, including twice receiving the <em>Best Elective Teacher Award</em> from INSEAD MBAs and the <em>Commendation for Teaching Excellence</em> from the Dean of Executive Education at INSEAD.</p>
+    <h4>I teach because something happens when people slow down enough to examine how they're making sense of their world.</h4>
+    <p>Most leadership education offers better answers. I'm more interested in better questions—the kind that unsettle comfortable assumptions and open unexpected territory.</p>
+    <p>In the classroom, we work with what's actually present: the unspoken tensions in the room, the authority dynamics between us, the gap between what we say we believe and how we actually behave. The content is leadership, learning, transformation. But the real curriculum is attention itself.</p>
+    <p>What participants often say: the work is challenging but not unsafe. Something shifts that they can't quite name. They leave with fewer certainties and more capacity.</p>
 </div>
 
 <div class="section">
