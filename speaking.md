@@ -9,23 +9,38 @@ description: "Speaking - Wojtek Materka"
 </div>
 
 <div class="section">
-    <div>
-        <h4>Speaker Profile</h4>
-        <p>"With a dynamic blend of energy, deep engagement, and playfulness I invite audiences to ponder questions that I live and work with myself: what does it mean to be a good leader in a world of diversity and paradoxes? how to cultivate meaningful work and life in a global, hyper-individualistic, mobile, and technologically-entangled world? How to transform ourselves and our teams and organisations and build resilience to navigate turbulent contexts? What deal are we making with modern technologies and how can we cultivate our humanity amidst these exponential shifts?"</p>
-        <p><strong>My passion lies in not just sharing ideas but in helping others explore and challenge their own assumptions.</strong> My approach emphasizes meaningful reflection, practical insights, and a safe space for dialogue. I connect with audiences through stimulating discussions and thoughtful guidance.</p>
+    <div style="display: flex; gap: 3rem; align-items: flex-start; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <h3>Speaker Profile</h3>
+            <p>I don't give talks that leave audiences with tidy answers. I'm more interested in the questions that stay with people after they leave the room and the ones that keep working on them.</p>
+            <p>My speaking draws on the same territory as my teaching: leadership and what it actually asks of us, transformation and what it costs, the challenge of staying human in systems that often prefer we didn't.</p>
+            <p>I work best with audiences ready to be unsettled. Not provoked for its own sake, but genuinely invited to examine assumptions they didn't know they were carrying.</p>
+            <p>What people tend to say afterward: it wasn't what they expected. Something opened. They're still thinking about it.</p>
+        </div>
+        <div style="flex: 0 0 auto; max-width: 400px;">
+            <img src="{{ '/images/speaking/WM at CEU.jpg' | relative_url }}" alt="Wojtek Materka speaking at CEU" style="width: 100%; height: auto; border-radius: 4px;">
+        </div>
     </div>
 
-    <div>
-        <h4>Example Speaking Engagements</h4>
-        <p>"Leadership in Transition: Embracing Change and Growth"</p>
-        <p>This talk invites professionals and emerging leaders to reflect on their personal and leadership journeys. With practical tools, reflective exercises, and real-life case studies, I guide audiences through how to navigate change and develop a stronger sense of intent and presence.</p>
-        <p></p>
-        <p>"Breaking Up to Break Through: Transformations at work and in working life."</p>
-        <p>This engagement focuses on the experience and process of transformation. Drawing on concepts from psychology, sociology, literature, organisational behaviour and life examples, I help leaders and teams understand how breaking with the past can lead to breakthroughs, fostering growth and free us up to live fuller and richer lives.</p>
-        <p></p>
-        <p>The Future of Technology and the Human Experience</p>
-        <p>In this session, we explore how technology is reshaping our identities, work, and society. Through philosophical and thought-provoking discussions, I challenge audiences to rethink the role of innovation in shaping human life and to find balance in an increasingly digital world.</p>
-        <p></p>
+    <div style="margin-top: 3rem;">
+        <h3>Topics I speak on:</h3>
+        
+        <div class="teaching-areas">
+            <div class="teaching-area">
+                <h4>Leadership in Transition</h4>
+                <p>What happens when the leadership identity that got you here stops working? How do we navigate the disorientation of growth and develop presence that doesn't depend on having the answers?</p>
+            </div>
+
+            <div class="teaching-area">
+                <h4>Transformation: Breaking Up to Break Through</h4>
+                <p>Real transformation requires letting something end. Drawing on psychology, literature, and lived experience, I explore how breaking with the past roles, identities and certainties can free us into fuller lives and more honest work.</p>
+            </div>
+
+            <div class="teaching-area">
+                <h4>Technology and the Human Experience</h4>
+                <p>We're being reshaped by technologies we barely understand. This isn't a talk about innovation but an invitation to ask what kind of humans we're becoming, and whether that's what we want.</p>
+            </div>
+        </div>
     </div>
 </div>
 

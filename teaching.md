@@ -8,15 +8,15 @@ description: "Teaching & Workshops - Wojtek Materka"
     <h2>Teaching & Workshops</h2>
 </div>
 
-<div class="video-container">
-    <iframe src="https://www.youtube.com/embed/QqimzJzk3K4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
-
 <div class="section">
-    <h4>I teach because something happens when people slow down enough to examine how they're making sense of their world.</h4>
-    <p>Most leadership education offers better answers. I'm more interested in better questions—the kind that unsettle comfortable assumptions and open unexpected territory.</p>
+    <h4>I teach because when people slow down enough to examine how they're making sense of their world, they can change it.</h4>
+    <p>Most leadership education offers better answers. I'm more interested in better questions. The kind that unsettle comfortable assumptions and open unexpected territory.</p>
     <p>In the classroom, we work with what's actually present: the unspoken tensions in the room, the authority dynamics between us, the gap between what we say we believe and how we actually behave. The content is leadership, learning, transformation. But the real curriculum is attention itself.</p>
     <p>What participants often say: the work is challenging but not unsafe. Something shifts that they can't quite name. They leave with fewer certainties and more capacity.</p>
+</div>
+
+<div class="video-container video-centered">
+    <iframe src="https://www.youtube.com/embed/QqimzJzk3K4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 <div class="section">
@@ -24,18 +24,18 @@ description: "Teaching & Workshops - Wojtek Materka"
     
     <div class="teaching-areas">
         <div class="teaching-area">
-            <h4>Leadership & Learning</h4>
-            <p>What does it mean to be a leader, how does one gain or lose authority, and why would anyone follow you? Learning and leadership go hand in hand, not just on individual level but as groups and systems - so how to cultivate resilience to allow us to learn and adapt in increasingly complex and stressful environments?</p>
+            <h4>Leadership and Learning</h4>
+            <p>Why would anyone follow you? And what are you learning from how they respond? Leadership and learning aren't separate competencies, they're the same practice, seen from different angles.</p>
         </div>
 
         <div class="teaching-area">
-            <h4>Transformation & Transitions</h4>
-            <p>How to transform - oneself, one's organisation, one's world - in a way that's thoughtful and effective, whilst recognising the complexity, uncertainty, unpredictability of the post-modern workplace characterised by shifting global challenges.</p>
+            <h4>Transformations, Transitions and Creativity</h4>
+            <p>What wants to end? What wants to begin? What emerges in the space between? Transformation is not just leading change, it's also the willingness to be changed.</p>
         </div>
 
         <div class="teaching-area">
-            <h4>Diversity, Creativity & Uncertainty</h4>
-            <p>How to work and lead in diverse and complex organisations full of conflicting norms and values? How to create opportunities for oneself and others amidst uncertainty whilst remaining authentic and intentional? How to play in order to find more adaptable ways of working amidst technological entanglement and increasingly boundary-less organisational structures?</p>
+            <h4>Uncertainty and Trust</h4>
+            <p>When you can't know the outcome, what holds the work together? Not certainty but something stronger: the capacity to stay in relationship with what we don't yet understand.</p>
         </div>
     </div>
 </div>
