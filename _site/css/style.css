@@ -259,6 +259,15 @@ header {
     justify-content: center;
     flex-shrink: 0;
     height: 44px;
+    background-image: none;
+    padding: 0;
+    margin: 0;
+}
+
+.linkedin-link:hover {
+    background-image: none;
+    background-size: auto;
+    background-position: 0 0;
 }
 
 .linkedin-link img {
