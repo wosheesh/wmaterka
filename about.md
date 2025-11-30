@@ -9,8 +9,8 @@ description: "About - Wojtek Materka"
 </div>
 
 <div class="section">
-    <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>.</p>
     <p>I'm a professor, a consultant, a father, a painter, someone who rides motorcycles. These are some of the costumes I am currently wearing. Some fit better than others.</p>
+    <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>.</p>
 </div>
 
 <div class="interference-section">

@@ -199,6 +199,10 @@ header {
     border-right: 1px dotted #ccc;
 }
 
+.main-nav li:last-child {
+    border-right: none;
+}
+
 
 .main-nav a {
     font-family: 'Source Sans 3', sans-serif;
@@ -378,6 +382,37 @@ main {
     font-size: 1.125rem;
     line-height: 1.7;
     max-width: 700px;
+}
+
+.homepage-contact {
+    margin-top: 3rem;
+    max-width: 700px;
+}
+
+.homepage-contact p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+}
+
+/* Thick underline links that lift on hover */
+.homepage-contact a {
+    color: var(--color-text);
+    background-image: linear-gradient(to bottom, rgba(61, 213, 209, 0.5) 0%, rgba(61, 213, 209, 0.5) 100%);
+    background-size: 100% 22%;
+    background-position: 0 92%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+    padding: 2px 2px;
+    margin: 0 -2px;
+    text-decoration: none;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.homepage-contact a:hover {
+    background-size: 100% 100%;
+    background-position: 0 0;
+    color: var(--color-text);
 }
 
 /* About page - keep animation within content width */

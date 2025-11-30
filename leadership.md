@@ -11,9 +11,9 @@ description: "Leadership Development - Wojtek Materka"
 <div class="section">
     <p>I design and lead programs for leaders and teams to help them examine how they are making sense of their world - and by doing so start to change it.</p>
     <p>Most leadership development offers better answers. I'm more interested in better questions. The kind that unsettle comfortable assumptions and open unexpected territory.</p>
-    <p>In the room, we work with what's actually present: the unspoken tensions between people, the authority dynamics playing out in real time, the gap between espoused values and actual behavior. The content is leadership, learning, transformation. But the real curriculum is attention itself.</p>
-    <p>I work with executive teams, intact leadership groups, and open-enrollment programs - designing experiences that range from single sessions to extended developmental journeys. The format adapts; the orientation stays the same: slow down, notice what's actually happening, build capacity from there.</p>
-    <p>What participants often say: the work is challenging but not unsafe. Something shifts that they can't quite name. They leave with fewer certainties and more capacity.</p>
+    <p>In the room, we work with what's actually present: the unspoken tensions between people, the authority dynamics playing out in real time, the gap between espoused values and actual behavior. The content is leadership, learning, transformation. But the real curriculum is attention and awareness itself.</p>
+    <p>I work with executive teams, intact leadership groups, and on open-enrollment programs - designing experiences that range from single sessions to extended developmental journeys. The format adapts; the orientation stays the same: slow down, notice what's actually happening, build capacity from there.</p>
+    <p>What participants often say: the work is challenging but rewarding. <em>"Something shifted in the way we saw the world, and it allowed us to create new possibilities"</em>. They leave with fewer certainties but more capacity.</p>
 </div>
 
 <div class="video-container video-centered">
