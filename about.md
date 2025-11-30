@@ -10,7 +10,7 @@ description: "About - Wojtek Materka"
 
 <div class="section">
     <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>.</p>
-    <p>I'm a professor, a painter, a consultant, a father, someone who rides motorcycles. These are costumes consciousness is currently wearing. Some fit better than others.</p>
+    <p>I'm a professor, a consultant, a father, a painter, someone who rides motorcycles. These are some of the costumes I am currently wearing. Some fit better than others.</p>
 </div>
 
 <div class="interference-section">
@@ -56,8 +56,8 @@ description: "About - Wojtek Materka"
             return;
         }
         
-        // Full width container
-        const maxWidth = Math.min(container.offsetWidth || 800, 800);
+        // Constrained width for better visual balance
+        const maxWidth = Math.min(container.offsetWidth || 400, 400);
         
         reveal = new WaveInterferenceReveal('#wave-container', '/images/interference_pic.png', {
             width: maxWidth,

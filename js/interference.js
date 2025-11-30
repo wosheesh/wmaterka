@@ -62,19 +62,19 @@ class WaveInterferenceReveal {
   loadImage() {
     const img = new Image();
     img.onload = () => {
-      // Smaller canvas size (max 500x350)
+      // Optimized canvas size (max 400x280)
       const containerWidth = Math.min(
         this.options.width || this.container.offsetWidth || 400,
-        500
+        400
       );
       const aspectRatio = img.width / img.height;
       
       this.width = containerWidth;
       this.height = Math.round(containerWidth / aspectRatio);
       
-      // Limit canvas size for smaller display
-      const maxWidth = 500;
-      const maxHeight = 350;
+      // Limit canvas size for better visual balance
+      const maxWidth = 400;
+      const maxHeight = 280;
       if (this.width > maxWidth) {
         this.height = Math.round(this.height * (maxWidth / this.width));
         this.width = maxWidth;
