@@ -660,6 +660,23 @@ main {
     flex: 1;
 }
 
+.about-photo-wrapper {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 767px) {
+    .about-photo-wrapper {
+        width: 150px;
+        height: 150px;
+    }
+}
+
 .about-item {
     display: flex;
     align-items: center;
@@ -687,8 +704,15 @@ main {
 .about-photo {
     width: 200px;
     height: 200px;
+    max-width: 200px;
+    max-height: 200px;
+    min-width: 200px;
+    min-height: 200px;
     object-fit: cover;
+    object-position: center;
     flex-shrink: 0;
+    display: block;
+    border-radius: 0;
 }
 
 @media (max-width: 767px) {
@@ -698,8 +722,12 @@ main {
     }
     
     .about-photo {
-        width: 150px;
-        height: 150px;
+        width: 150px !important;
+        height: 150px !important;
+        max-width: 150px !important;
+        max-height: 150px !important;
+        min-width: 150px !important;
+        min-height: 150px !important;
     }
 }
 

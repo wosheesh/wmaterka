@@ -27,7 +27,9 @@ description: "About - Wojtek Materka"
             <p>Sometimes I make things with code. The one below asks: what does it take to reveal a hidden image? Patience, interference, or a well-placed drop. Play with it.</p>
         </div>
     </div>
-    <img src="{{ '/images/about/Tims Bike WM.jpg' | relative_url }}" alt="Wojtek Materka" class="about-photo">
+    <div class="about-photo-wrapper">
+        <img src="{{ '/images/about/Tims Bike WM.jpg' | relative_url }}" alt="Wojtek Materka" class="about-photo">
+    </div>
 </div>
 
 <div class="interference-section">
