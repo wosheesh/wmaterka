@@ -8,18 +8,35 @@ description: "About - Wojtek Materka"
     <h2>About me</h2>
 </div>
 
-<div class="section">
-    <p>I'm a professor, a consultant, a father, a painter, someone who rides motorcycles. These are some of the costumes I am currently wearing. Some fit better than others.</p>
-    <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>.</p>
+<div class="section about-intro">
+    <div class="about-text">
+        <div class="about-item">
+            <span class="about-bullet">🎭</span>
+            <p>I'm a professor, a consultant, a father, a painter, someone who rides motorcycles. These are some of the costumes I am currently wearing. Some fit better than others.</p>
+        </div>
+        <div class="about-item">
+            <span class="about-bullet">📄</span>
+            <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>. Or if you want connect with me, you can find me on <a href="https://www.linkedin.com/in/wmaterka/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+        </div>
+        <div class="about-item">
+            <span class="about-bullet"><img src="{{ '/favicon.ico' | relative_url }}" alt=""></span>
+            <p>I also make <a href= "/art">art - painting and photography</a> - that help me stay in contact with what I can't say any other way.</p>
+        </div>
+        <div class="about-item">
+            <span class="about-bullet">💻</span>
+            <p>Sometimes I make things with code. The one below asks: what does it take to reveal a hidden image? Patience, interference, or a well-placed drop. Play with it.</p>
+        </div>
+    </div>
+    <img src="{{ '/images/about/Tims Bike WM.jpg' | relative_url }}" alt="Wojtek Materka" class="about-photo">
 </div>
 
 <div class="interference-section">
-    <h3>Paint with Rain</h3>
+    <h3>"Paint with Rain" - a little experiment</h3>
     <p>What kind of rain would reveal this picture — play to find out!</p>
     <div class="interference-controls">
         <div class="control-group">
             <label for="ctrl-frequency">Rain Frequency</label>
-            <input type="range" id="ctrl-frequency" min="50" max="1200" value="400" step="25">
+            <input type="range" id="ctrl-frequency" min="50" max="1200" value="1050" step="25">
             <span class="control-value" id="val-frequency">Fast</span>
         </div>
         <div class="control-group">
@@ -59,13 +76,13 @@ description: "About - Wojtek Materka"
         // Constrained width for better visual balance
         const maxWidth = Math.min(container.offsetWidth || 400, 400);
         
-        reveal = new WaveInterferenceReveal('#wave-container', '/images/interference_pic.png', {
+        reveal = new WaveInterferenceReveal('#wave-container', '/images/about/interference_pic.png', {
             width: maxWidth,
             maxWaves: 30, // More droplets allowed
             waveSpeed: 1.2,
             ringCount: 3,
             ringSpacings: [14, 10, 7],
-            spawnInterval: 400, // Faster default
+            spawnInterval: 200, // More frequent default
             flickerDuration: 50,
             oppositionThreshold: -0.3,
             maxWaveRadius: 120,

@@ -61,7 +61,10 @@ description: "Leadership Development - Wojtek Materka"
 </div>
 
 <div class="section">
-    <h2 class="quote"><em>"Good teaching is like</em> <em>good art</em> <em>" - it moves us and it makes us think and act in new ways."</em></h2>
+    <div class="quote-with-photo">
+        <img src="{{ '/images/leadership/WM_about.jpeg' | relative_url }}" alt="Wojtek Materka" class="hero-photo">
+        <h2 class="quote"><em>"Good teaching is like good art - it moves us and it makes us think and act in new ways."</em></h2>
+    </div>
 </div>
 
 

@@ -21,7 +21,7 @@ class WaveInterferenceReveal {
     this.rippleCount = 0;
     this.maxRipples = 3; // Number of wave passes after completion
     
-    // Pixel size based on device pixel ratio - use larger pixels for better performance
+    // Pixel size based on device pixel ratio - use smaller pixels for higher resolution
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     
     this.config = {
@@ -31,8 +31,8 @@ class WaveInterferenceReveal {
       // Ring spacing decreases - first gap larger, subsequent smaller (like real ripples)
       ringSpacings: options.ringSpacings || [14, 10, 7],
       spawnInterval: options.spawnInterval || 1200,
-      // Higher resolution (2px base)
-      pixelSize: Math.max(2, Math.round(3 / dpr)),
+      // Higher resolution (1px base for finer detail)
+      pixelSize: Math.max(1, Math.round(2 / dpr)),
       baseGray: 255,
       waveGray: 140,
       revealGray: 70,
@@ -180,7 +180,7 @@ class WaveInterferenceReveal {
           birth: this.time
         });
       }
-      setTimeout(spawn, this.config.spawnInterval + Math.random() * 800);
+      setTimeout(spawn, this.config.spawnInterval + Math.random() * 400);
     };
     spawn();
   }
@@ -226,7 +226,8 @@ class WaveInterferenceReveal {
       if (this.complete) {
         counter.textContent = 'Picture revealed!';
       } else {
-        const active = this.waves.filter(w => w.manual).length;
+        // Count active manual waves by checking both the manual flag and the manualWaveIds set
+        const active = this.waves.filter(w => this.manualWaveIds.has(w.id)).length;
         const remaining = this.maxManualWaves - active;
         counter.textContent = `${active} dropped, ${remaining} remaining`;
       }
@@ -257,8 +258,12 @@ class WaveInterferenceReveal {
     // Intensity falls off with distance (1/sqrt for 2D wave spreading)
     const falloff = 1 / Math.sqrt(1 + dist * 0.02);
     
-    // Fade out near the end of wave life
-    const lifeFade = 1 - Math.pow(wave.radius / maxRadius, 2);
+    // Exponential fade that accelerates dramatically towards the end
+    // Use exponential function for natural acceleration: e^(-k*x) where k increases fade rate
+    const normalizedRadius = wave.radius / maxRadius;
+    // Exponential curve: e^(-5*x^2) - starts gentle, accelerates rapidly near the end
+    // This creates a more natural fade that speeds up as it approaches the end
+    const lifeFade = Math.exp(-5 * normalizedRadius * normalizedRadius);
     
     return falloff * lifeFade;
   }
