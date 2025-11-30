@@ -19,7 +19,7 @@ description: "About - Wojtek Materka"
             <p>If you are after my academic CV <a href="/s/Wojtek Materka CV Nov_2025.pdf" target="_blank" rel="noopener noreferrer">here it is</a>. Or if you want connect with me, you can find me on <a href="https://www.linkedin.com/in/wmaterka/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
         </div>
         <div class="about-item">
-            <span class="about-bullet"><img src="{{ '/favicon.ico' | relative_url }}" alt=""></span>
+            <span class="about-bullet">🎨</span>
             <p>I also make <a href= "/art">art - painting and photography</a> - that help me stay in contact with what I can't say any other way.</p>
         </div>
         <div class="about-item">

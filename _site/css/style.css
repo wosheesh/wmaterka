@@ -675,27 +675,8 @@ main {
     font-size: 2rem;
     line-height: 1;
     flex-shrink: 0;
-    /* Greyscale and dithering effect */
-    filter: grayscale(100%) contrast(1.4) brightness(0.85);
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
-    /* Create dithering-like effect with opacity and contrast */
-    opacity: 0.9;
-    text-rendering: optimizeSpeed;
-}
-
-.about-bullet img {
-    width: 2rem;
-    height: 2rem;
-    display: block;
-    object-fit: contain;
-    /* Greyscale and dithering effect */
-    filter: grayscale(100%) contrast(1.4) brightness(0.85);
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
-    opacity: 0.9;
+    /* Greyscale */
+    filter: grayscale(100%);
 }
 
 .about-item p {
