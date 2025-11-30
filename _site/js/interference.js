@@ -20,6 +20,8 @@ class WaveInterferenceReveal {
     this.ripplePhase = 0;
     this.rippleCount = 0;
     this.maxRipples = 3; // Number of wave passes after completion
+    this.stuckAt99Timer = null; // Timer for detecting stuck at 99%
+    this.lastProgress = 0; // Track last progress value
     
     // Pixel size based on device pixel ratio - use smaller pixels for higher resolution
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -479,6 +481,41 @@ class WaveInterferenceReveal {
     // Calculate progress
     const percent = this.totalImagePixels > 0 ? (revealedCount / this.totalImagePixels) * 100 : 0;
     
+    // Check if stuck at 99% for more than 5 seconds
+    if (!this.complete && percent >= 99 && percent < 99.5) {
+      // If progress changed, reset timer
+      if (this.lastProgress !== percent) {
+        if (this.stuckAt99Timer) {
+          clearTimeout(this.stuckAt99Timer);
+          this.stuckAt99Timer = null;
+        }
+        // Start timer if not already started
+        if (!this.stuckAt99Timer) {
+          this.stuckAt99Timer = setTimeout(() => {
+            // Force completion after 5 seconds stuck at 99%
+            this.complete = true;
+            this.ripplePhase = 0;
+            this.rippleCount = 0;
+            this.waves = [];
+            this.manualWaveIds.clear();
+            this.updateManualCounter();
+            if (this.onProgress) {
+              this.onProgress(100);
+            }
+            this.stuckAt99Timer = null;
+          }, 5000);
+        }
+      }
+    } else {
+      // Progress changed or completed normally, clear timer
+      if (this.stuckAt99Timer) {
+        clearTimeout(this.stuckAt99Timer);
+        this.stuckAt99Timer = null;
+      }
+    }
+    
+    this.lastProgress = percent;
+    
     // Check for completion (use 99.5% threshold to handle edge cases)
     if (!this.complete && percent >= 99.5) {
       this.complete = true;
@@ -489,6 +526,11 @@ class WaveInterferenceReveal {
       this.manualWaveIds.clear();
       // Update counter to show completion
       this.updateManualCounter();
+      // Clear stuck timer if it exists
+      if (this.stuckAt99Timer) {
+        clearTimeout(this.stuckAt99Timer);
+        this.stuckAt99Timer = null;
+      }
     }
     
     // Render water ripple effect when complete
