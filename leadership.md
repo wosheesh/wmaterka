@@ -1,17 +1,18 @@
 ---
 layout: default
-title: "Teaching — Wojtek Materka"
-description: "Teaching & Workshops - Wojtek Materka"
+title: "Leadership Development — Wojtek Materka"
+description: "Leadership Development - Wojtek Materka"
 ---
 
 <div class="page-header">
-    <h2>Teaching & Workshops</h2>
+    <h2>Leadership Development</h2>
 </div>
 
 <div class="section">
-    <h4>I teach because when people slow down enough to examine how they're making sense of their world, they can change it.</h4>
-    <p>Most leadership education offers better answers. I'm more interested in better questions. The kind that unsettle comfortable assumptions and open unexpected territory.</p>
-    <p>In the classroom, we work with what's actually present: the unspoken tensions in the room, the authority dynamics between us, the gap between what we say we believe and how we actually behave. The content is leadership, learning, transformation. But the real curriculum is attention itself.</p>
+    <p>I design and lead programs for leaders and teams to help them examine how they are making sense of their world - and by doing so start to change it.</p>
+    <p>Most leadership development offers better answers. I'm more interested in better questions. The kind that unsettle comfortable assumptions and open unexpected territory.</p>
+    <p>In the room, we work with what's actually present: the unspoken tensions between people, the authority dynamics playing out in real time, the gap between espoused values and actual behavior. The content is leadership, learning, transformation. But the real curriculum is attention itself.</p>
+    <p>I work with executive teams, intact leadership groups, and open-enrollment programs - designing experiences that range from single sessions to extended developmental journeys. The format adapts; the orientation stays the same: slow down, notice what's actually happening, build capacity from there.</p>
     <p>What participants often say: the work is challenging but not unsafe. Something shifts that they can't quite name. They leave with fewer certainties and more capacity.</p>
 </div>
 
@@ -20,7 +21,7 @@ description: "Teaching & Workshops - Wojtek Materka"
 </div>
 
 <div class="section">
-    <h3>Some core areas I teach:</h3>
+    <h3>My core areas:</h3>
     
     <div class="teaching-areas">
         <div class="teaching-area">
@@ -62,4 +63,5 @@ description: "Teaching & Workshops - Wojtek Materka"
 <div class="section">
     <h2 class="quote"><em>"Good teaching is like</em> <em>good art</em> <em>" - it moves us and it makes us think and act in new ways."</em></h2>
 </div>
+
 

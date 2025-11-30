@@ -5,7 +5,7 @@ A personal website for Wojtek Materka, built with Jekyll and hosted on GitHub Pa
 ## Structure
 
 - `index.md` - Homepage
-- `teaching.md` - Teaching & Workshops page
+- `leadership.md` - Leadership Development page
 - `speaking.md` - Speaking page
 - `writing.md` - Writing page
 - `about.md` - About/CV page
