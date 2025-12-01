@@ -828,7 +828,7 @@ main {
 /* Articles List */
 .articles-list {
     list-style: none;
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 .articles-list li {
@@ -842,8 +842,10 @@ main {
 }
 
 .articles-list a {
-    font-weight: 600;
-    display: block;
+    font-family: 'Spectral', serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    display: inline-block;
     margin-bottom: 0.25rem;
 }
 
