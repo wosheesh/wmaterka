@@ -12,7 +12,7 @@ description: "Speaking - Wojtek Materka"
     <div style="display: flex; gap: 3rem; align-items: flex-start; flex-wrap: wrap;">
         <div style="flex: 1; min-width: 300px;">
             <h3>Speaker Profile</h3>
-            <p>I don't give talks that leave audiences with tidy answers. I'm more interested in the questions that stay with people after they leave the room and the ones that keep working on them.</p>
+            <p class="page-description">I don't give talks that leave audiences with tidy answers. I'm more interested in the questions that stay with people after they leave the room and the ones that keep working on them.</p>
             <p>My speaking focuses on leadership and what it actually asks of us, transformation and what it costs, and the challenge of staying human in systems that often prefer we didn't.</p>
             <p>I work best with audiences ready to be unsettled. Not provoked for its own sake, but genuinely invited to examine assumptions they didn't know they were carrying.</p>
             <p>What people tend to say afterward: it wasn't what they expected. Something opened. They're still thinking about it.</p>

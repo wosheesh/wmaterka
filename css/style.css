@@ -441,7 +441,7 @@ main {
     font-style: italic;
 }
 
-.homepage-description {
+.page-description {
     font-size: 1.25rem;
     line-height: 1.75;
     max-width: 700px;
@@ -985,7 +985,7 @@ footer {
         gap: 1.5rem;
     }
     
-    .homepage-description {
+    .page-description {
         font-size: 1rem;
     }
 }

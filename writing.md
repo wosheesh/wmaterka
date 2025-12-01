@@ -11,7 +11,7 @@ description: "Writing - Wojtek Materka"
 <div class="section">
     <div>
         <h4>Articles & Essays</h4>
-        <p>My personal reflections where I don't shy away from philosophical inquiry and occasionally mix a dash of practical advice. I explore the complex intersection of leadership, human nature, art, design and technology in a rapidly evolving world:</p>
+        <p class="page-description">My personal reflections where I don't shy away from philosophical inquiry and occasionally mix a dash of practical advice. I explore the complex intersection of leadership, human nature, art, design and technology in a rapidly evolving world:</p>
         
         <ul class="articles-list">
             <li>
