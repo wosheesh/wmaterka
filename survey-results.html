@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  "Where Are You on the Curve?" — live results dashboard
+  ----------------------------------------------------------------------------
+  This is a SELF-CONTAINED static page (no Jekyll layout, no external JS libs).
+  It reads anonymous responses straight from a Google Sheet (the one your
+  Google Form writes to) and renders them as a presenter-facing dashboard:
+  the live curve with the room's ladder dot, word clouds, and distributions.
+
+  HOW TO WIRE IT UP:  see SURVEY_SETUP.md in the repo root.
+  You only need to edit the CONFIG block a few lines below.
+
+  URL once deployed:  https://wmaterka.com/survey-results.html
+  Keep this URL to yourself — it's the presenter screen, not the student link.
+  ============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Where Are You on the Curve? — Live Results</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --accent: #1a5f5e;
+    --accent-bright: #3dd5d1;
+    --muted: #666;
+    --border: rgba(26, 26, 26, 0.1);
+    --warm: #d97b3f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text); background: var(--bg);
+    line-height: 1.5; -webkit-font-smoothing: antialiased;
+    padding-bottom: 6rem;
+  }
+  h1, h2, h3 { font-family: 'Spectral', serif; font-weight: 400; line-height: 1.25; }
+  h1 em, h2 em, h3 em { font-style: italic; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 5vw; }
+
+  /* ---- top control bar ---- */
+  .bar {
+    position: sticky; top: 0; z-index: 50; background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; align-items: center; gap: .6rem;
+    padding: .8rem 5vw;
+  }
+  .bar .count { font-family: 'Spectral', serif; font-size: 1.4rem; margin-right: auto; }
+  .bar .count b { color: var(--accent); }
+  .btn {
+    font-family: inherit; font-size: .9rem; font-weight: 600;
+    border: 1px solid var(--accent); background: var(--bg); color: var(--accent);
+    padding: .4rem .8rem; border-radius: 999px; cursor: pointer; transition: .15s;
+  }
+  .btn:hover { background: var(--accent); color: #fff; }
+  .btn.on { background: var(--accent); color: #fff; }
+  .status { font-size: .8rem; color: var(--muted); margin-left: .4rem; }
+  .status.err { color: var(--warm); font-weight: 600; }
+
+  /* ---- header ---- */
+  header.hero { padding: 2.5rem 0 1rem; }
+  header.hero h1 { font-size: 2.6rem; margin-bottom: .3rem; }
+  header.hero p { color: var(--muted); font-size: 1.1rem; }
+
+  /* ---- cards ---- */
+  .card {
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.6rem 1.8rem; margin: 1.4rem 0;
+  }
+  .card > .head { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .card .qid {
+    font-family: 'Spectral', serif; font-style: italic; color: var(--accent);
+    font-size: 1.05rem;
+  }
+  .card h2 { font-size: 1.5rem; flex: 1 1 320px; }
+  .card .reveal-toggle { margin-left: auto; }
+  .card .body { margin-top: 1.2rem; }
+  .card.hidden .body { display: none; }
+  .card.hidden { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 12px, #f4f4f4 12px, #f4f4f4 24px); }
+  .veil { color: var(--muted); font-style: italic; padding: .5rem 0; }
+
+  /* ---- big numbers ---- */
+  .bignum { font-family: 'Spectral', serif; font-size: 3.4rem; color: var(--accent); line-height: 1; }
+  .bignum small { font-size: 1.1rem; color: var(--muted); font-style: italic; }
+  .metricrow { display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: flex-end; }
+  .metric .lbl { color: var(--muted); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; }
+
+  /* ---- histogram (0-10) ---- */
+  .hist { display: flex; align-items: flex-end; gap: 4px; height: 130px; margin-top: 1rem; }
+  .hist .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; height: 100%; }
+  .hist .col .b { width: 100%; background: var(--accent-bright); border-radius: 4px 4px 0 0; min-height: 2px; transition: height .4s; }
+  .hist .col .n { font-size: .75rem; color: var(--muted); }
+  .hist .col .x { font-size: .85rem; font-weight: 600; }
+
+  /* ---- categorical bars ---- */
+  .bars { margin-top: .6rem; }
+  .bars .row { display: grid; grid-template-columns: 220px 1fr 48px; align-items: center; gap: .8rem; margin: .45rem 0; }
+  .bars .row .cl { font-size: .95rem; text-align: right; color: var(--text); }
+  .bars .track { background: #f0f0f0; border-radius: 6px; height: 26px; overflow: hidden; }
+  .bars .fill { height: 100%; background: var(--accent); border-radius: 6px; transition: width .4s; min-width: 2px; }
+  .bars .pc { font-size: .9rem; color: var(--muted); }
+  .bars.diverging .fill { background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+
+  /* ---- word cloud ---- */
+  .cloud { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; align-items: baseline; line-height: 1.1; padding: .5rem 0; }
+  .cloud span { font-family: 'Spectral', serif; color: var(--accent); white-space: nowrap; }
+  .cloud span .ct { font-size: .55em; color: var(--muted); font-family: 'Source Sans 3'; vertical-align: super; }
+
+  /* ---- curve ---- */
+  .curvewrap { margin-top: 1rem; }
+  .curve svg { width: 100%; height: auto; display: block; }
+  .legend { display: flex; gap: 1.6rem; flex-wrap: wrap; margin-top: .6rem; font-size: .9rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 26px; height: 0; vertical-align: middle; margin-right: .4rem; }
+  .legend .old i { border-top: 2px dotted var(--muted); }
+  .legend .new i { border-top: 3px solid var(--accent); }
+  .legend .dot i { border-top: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--warm); }
+  .caption { font-style: italic; color: var(--text); margin-top: .8rem; font-size: 1.05rem; }
+
+  .note { color: var(--muted); font-size: .85rem; margin-top: .8rem; font-style: italic; }
+  footer.foot { text-align: center; color: var(--muted); font-size: .8rem; margin-top: 3rem; }
+  .empty { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================================
+     CONFIG — EDIT THESE FOUR/FIVE LINES. See SURVEY_SETUP.md for how to get
+     the values. Everything else is automatic.
+     ====================================================================== -->
+<script>
+const CONFIG = {
+  // 'gviz' = live, near-instant (needs the sheet shared "anyone with link can view").
+  // 'csv'  = published-to-web CSV; most reliable across browsers but cached ~5 min.
+  source: 'gviz',
+
+  // From the Sheet URL:  docs.google.com/spreadsheets/d/THIS_PART/edit#gid=0
+  sheetId: '1g4-U3P-II9Gy7CZ_hnlKQf2SmkXXh8o5ooTdOU5Sq4U',
+  gid: '1381412490',
+
+  // Only used when source === 'csv'. Paste the full "Publish to web" CSV link.
+  csvUrl: '',
+
+  // How often to re-fetch while live (seconds).
+  pollSeconds: 15,
+};
+</script>
+
+<div class="bar">
+  <div class="count"><b id="nResp">—</b> responses</div>
+  <button class="btn" id="btnAll">Reveal all</button>
+  <button class="btn" id="btnNone">Hide all</button>
+  <button class="btn on" id="btnAuto">Auto-refresh: on</button>
+  <button class="btn" id="btnRefresh">Refresh now</button>
+  <span class="status" id="status">starting…</span>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>Where are you on the <em>curve</em>?</h1>
+    <p>Anonymous live results. Showing the average and the spread — never any individual.</p>
+  </header>
+
+  <!-- Q1 — Ladder + the live curve -->
+  <section class="card hidden" data-card="q1">
+    <div class="head">
+      <span class="qid">Q1</span>
+      <h2>Which rung are you standing on <em>today</em>?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body">
+      <div class="metricrow">
+        <div class="metric"><div class="lbl">Room average (the dot)</div><div class="bignum" id="q1avg">—</div></div>
+        <div class="metric"><div class="lbl">Spread (std. dev.)</div><div class="bignum" id="q1sd" style="font-size:2.2rem">—</div></div>
+      </div>
+      <div class="curvewrap">
+        <div class="curve" id="curve"></div>
+        <div class="legend">
+          <span class="old"><i></i>the curve my generation entered on</span>
+          <span class="new"><i></i>the curve the research finds today</span>
+          <span class="dot"><i></i>you, today</span>
+        </div>
+        <p class="caption" id="q1caption">The research predicts a room of 21-year-olds sits here. You just told us where you actually sit.</p>
+      </div>
+      <div class="hist" id="q1hist"></div>
+    </div>
+  </section>
+
+  <!-- Q5 — still looking for (word cloud) -->
+  <section class="card hidden" data-card="q5">
+    <div class="head">
+      <span class="qid">Q5</span>
+      <h2>In one word: what are you <em>still looking for</em>?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body"><div class="cloud" id="q5cloud"></div></div>
+  </section>
+
+  <!-- Q6 — what you wish older generations understood (held for the close) -->
+  <section class="card hidden" data-card="q6">
+    <div class="head">
+      <span class="qid">Q6</span>
+      <h2>What do you wish <em>older generations</em> understood about you?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body"><div class="cloud" id="q6cloud"></div></div>
+  </section>
+
+  <!-- Q3 — worthwhile -->
+  <section class="card hidden" data-card="q3">
+    <div class="head">
+      <span class="qid">Q3</span>
+      <h2>To what extent do the things you do feel <em>worthwhile</em>?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body">
+      <div class="metricrow">
+        <div class="metric"><div class="lbl">Average</div><div class="bignum" id="q3avg">—</div></div>
+        <div class="metric"><div class="lbl">Spread</div><div class="bignum" id="q3sd" style="font-size:2.2rem">—</div></div>
+      </div>
+      <div class="hist" id="q3hist"></div>
+    </div>
+  </section>
+
+  <!-- Q2 — generational reversal -->
+  <section class="card hidden" data-card="q2">
+    <div class="head">
+      <span class="qid">Q2</span>
+      <h2>Better than your <em>parents'</em> lives?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body"><div class="bars diverging" id="q2bars"></div></div>
+  </section>
+
+  <!-- Q4 — loneliness (duty of care) -->
+  <section class="card hidden" data-card="q4">
+    <div class="head">
+      <span class="qid">Q4</span>
+      <h2>In the last two weeks, how often have you felt <em>lonely</em>?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body">
+      <button class="btn" id="q4mode" style="margin-bottom:1rem">Mode: numbers</button>
+      <div class="bars" id="q4bars"></div>
+      <p class="note">Duty of care: if the room feels fragile, switch to qualitative mode — it hides exact counts and describes the shape gently instead.</p>
+    </div>
+  </section>
+
+  <!-- Q7 — what weighs on you -->
+  <section class="card hidden" data-card="q7">
+    <div class="head">
+      <span class="qid">Q7</span>
+      <h2>What worries you most about the world you're stepping into?</h2>
+      <button class="btn reveal-toggle">Reveal</button>
+    </div>
+    <div class="body"><div class="bars" id="q7bars"></div></div>
+  </section>
+
+  <footer class="foot">Anonymous • live • <span id="updated">—</span></footer>
+</div>
+
+<script>
+/* =========================================================================
+   1. QUESTION MAP — how to find each question's column in the Sheet.
+   `match` is matched (case-insensitive substring) against the column header,
+   which Google Forms sets to the full question text. `idx` is a positional
+   fallback (0 = Timestamp). Edit `match` only if you reworded a question.
+   ========================================================================= */
+const Q = {
+  q1: { kind: 'scale',  match: 'rung',                idx: 1 },
+  q2: { kind: 'cat',    match: 'parents',             idx: 2,
+        order: ['Much better','Somewhat better','About the same','Somewhat worse','Much worse'] },
+  q3: { kind: 'scale',  match: 'worthwhile',          idx: 3 },
+  q4: { kind: 'cat',    match: 'lonely',              idx: 4,
+        order: ['Never','Rarely','Some of the time','Often','Almost always'] },
+  q5: { kind: 'words',  match: 'still looking',       idx: 5 },
+  q6: { kind: 'words',  match: 'older generations',   idx: 6 },
+  q7: { kind: 'cat',    match: 'worries you most',    idx: 7,
+        order: ['Cost of living & housing','AI & the job market','Climate & the environment',
+                'Burnout & mental health','Political instability'] },
+};
+
+/* =========================================================================
+   2. FETCH + PARSE  (handles both gviz-JSON and published-CSV)
+   ========================================================================= */
+async function fetchRows() {
+  if (CONFIG.source === 'csv') {
+    if (!CONFIG.csvUrl) throw new Error('CONFIG.csvUrl is empty');
+    const txt = await (await fetch(CONFIG.csvUrl, { cache: 'no-store' })).text();
+    return parseCSV(txt); // -> { headers:[], rows:[[]] }
+  }
+  // gviz JSON
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq`
+            + `?tqx=out:json&gid=${CONFIG.gid}&headers=1&_=${tick()}`;
+  const txt = await (await fetch(url, { cache: 'no-store' })).text();
+  return parseGviz(txt);
+}
+
+// gviz wraps JSON in `...setResponse({...});` — strip it.
+function parseGviz(txt) {
+  const json = JSON.parse(txt.replace(/^[^(]*\(/, '').replace(/\);?\s*$/, ''));
+  const cols = json.table.cols.map(c => (c.label || '').trim());
+  const rows = json.table.rows.map(r =>
+    (r.c || []).map(cell => cell == null ? '' : (cell.f != null ? cell.f : cell.v)));
+  return { headers: cols, rows };
+}
+
+// minimal RFC-4180-ish CSV parser (handles quotes, commas, newlines in fields)
+function parseCSV(txt) {
+  const out = []; let row = []; let field = ''; let q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (q) {
+      if (c === '"') { if (txt[i+1] === '"') { field += '"'; i++; } else q = false; }
+      else field += c;
+    } else {
+      if (c === '"') q = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n') { row.push(field); out.push(row); row = []; field = ''; }
+      else if (c === '\r') { /* skip */ }
+      else field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); out.push(row); }
+  const headers = out.shift() || [];
+  return { headers: headers.map(h => h.trim()), rows: out.filter(r => r.some(x => x !== '')) };
+}
+
+// resolve each question to a column index, by header match then positional fallback
+function resolveCols(headers) {
+  const lower = headers.map(h => (h || '').toLowerCase());
+  const col = {};
+  for (const [id, def] of Object.entries(Q)) {
+    let i = lower.findIndex(h => h.includes(def.match.toLowerCase()));
+    if (i < 0) i = def.idx;
+    col[id] = i;
+  }
+  return col;
+}
+
+/* =========================================================================
+   3. AGGREGATION
+   ========================================================================= */
+function valuesFor(rows, ci) {
+  return rows.map(r => (r[ci] ?? '').toString().trim()).filter(v => v !== '');
+}
+function stats(nums) {
+  if (!nums.length) return { n: 0, mean: NaN, sd: NaN };
+  const n = nums.length, mean = nums.reduce((a, b) => a + b, 0) / n;
+  const sd = Math.sqrt(nums.reduce((a, b) => a + (b - mean) ** 2, 0) / n);
+  return { n, mean, sd };
+}
+function hist0to10(nums) {
+  const h = Array(11).fill(0);
+  nums.forEach(v => { const k = Math.round(v); if (k >= 0 && k <= 10) h[k]++; });
+  return h;
+}
+function counts(vals, order) {
+  const m = new Map(order.map(o => [o, 0]));
+  vals.forEach(v => {
+    const lv = v.toLowerCase().trim();
+    // exact match first (Forms writes the option text verbatim); then full-string
+    // containment either way as a lenient fallback — never a truncated prefix,
+    // so "Somewhat better" and "Somewhat worse" never collide.
+    let hit = order.find(o => o.toLowerCase() === lv)
+           || order.find(o => lv.includes(o.toLowerCase()) || o.toLowerCase().includes(lv));
+    if (hit) m.set(hit, m.get(hit) + 1);
+  });
+  return order.map(o => ({ label: o, n: m.get(o) }));
+}
+function wordFreq(vals) {
+  const m = new Map();
+  vals.forEach(raw => {
+    raw.split(/[\s,;/]+/).forEach(w => {
+      const k = w.toLowerCase().replace(/[^\p{L}\p{N}\-']/gu, '').trim();
+      if (k.length < 2) return;
+      m.set(k, (m.get(k) || 0) + 1);
+    });
+  });
+  return [...m.entries()].map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n);
+}
+
+/* =========================================================================
+   4. RENDERERS
+   ========================================================================= */
+function renderHist(elId, h) {
+  const max = Math.max(1, ...h);
+  document.getElementById(elId).innerHTML = h.map((n, i) =>
+    `<div class="col"><div class="n">${n || ''}</div>`
+    + `<div class="b" style="height:${(n / max) * 100}%"></div>`
+    + `<div class="x">${i}</div></div>`).join('');
+}
+function renderBars(elId, data, { qualitative = false } = {}) {
+  const total = data.reduce((a, d) => a + d.n, 0) || 1;
+  document.getElementById(elId).innerHTML = data.map(d => {
+    const pct = (d.n / total) * 100;
+    const right = qualitative ? '' : `<div class="pc">${Math.round(pct)}%</div>`;
+    const grid = qualitative ? 'grid-template-columns:220px 1fr;' : '';
+    return `<div class="row" style="${grid}"><div class="cl">${esc(d.label)}</div>`
+      + `<div class="track"><div class="fill" style="width:${pct}%"></div></div>${right}</div>`;
+  }).join('');
+}
+function renderCloud(elId, freqs) {
+  const el = document.getElementById(elId);
+  if (!freqs.length) { el.innerHTML = '<span class="empty">waiting for responses…</span>'; return; }
+  const max = freqs[0].n;
+  el.innerHTML = freqs.slice(0, 60).map(({ w, n }) => {
+    const size = 18 + (n / max) * 48;       // 18 → 66 px
+    const op = 0.55 + 0.45 * (n / max);
+    const ct = n > 1 ? `<span class="ct">${n}</span>` : '';
+    return `<span style="font-size:${size}px;opacity:${op}">${esc(w)}${ct}</span>`;
+  }).join('');
+}
+function esc(s) { return (s + '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+/* ---- the curve (hand-drawn SVG, data-driven dot) ---- */
+// Stylised reference shapes — tweak the y-values to match your research slide.
+const CURVE_OLD = [[18,7.6],[28,7.1],[38,6.7],[48,6.5],[58,6.8],[68,7.3],[78,7.5]]; // the U
+const CURVE_NEW = [[18,5.9],[28,6.1],[38,6.4],[48,6.7],[58,7.0],[68,7.3],[78,7.5]]; // rising
+const AGE0 = 18, AGE1 = 80, VMAX = 10;
+const PAD = { l: 56, r: 30, t: 24, b: 46 }, VBW = 1000, VBH = 540;
+const PX = a => PAD.l + (a - AGE0) / (AGE1 - AGE0) * (VBW - PAD.l - PAD.r);
+const PY = v => PAD.t + (VMAX - v) / VMAX * (VBH - PAD.t - PAD.b);
+
+function smoothPath(pts) { // Catmull-Rom -> cubic bezier
+  const p = pts.map(([a, v]) => [PX(a), PY(v)]);
+  let d = `M${p[0][0]},${p[0][1]}`;
+  for (let i = 0; i < p.length - 1; i++) {
+    const p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2;
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C${c1x},${c1y} ${c2x},${c2y} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+function renderCurve(avg) {
+  const yTicks = [0, 2, 4, 6, 8, 10], xTicks = [18, 30, 40, 50, 60, 70, 80];
+  const grid = yTicks.map(v =>
+    `<line x1="${PAD.l}" y1="${PY(v)}" x2="${VBW - PAD.r}" y2="${PY(v)}" stroke="#eee"/>`
+    + `<text x="${PAD.l - 10}" y="${PY(v) + 4}" text-anchor="end" font-size="13" fill="#999">${v}</text>`).join('');
+  const xlab = xTicks.map(a =>
+    `<text x="${PX(a)}" y="${VBH - PAD.b + 22}" text-anchor="middle" font-size="13" fill="#999">${a}</text>`).join('');
+  let dot = '';
+  if (!isNaN(avg)) {
+    const x = PX(21), y = PY(avg);
+    dot = `<line x1="${x}" y1="${PY(0)}" x2="${x}" y2="${y}" stroke="#d97b3f" stroke-width="1.5" stroke-dasharray="3 3" opacity=".5"/>`
+      + `<circle cx="${x}" cy="${y}" r="13" fill="#d97b3f"><animate attributeName="r" values="13;17;13" dur="1.8s" repeatCount="indefinite"/></circle>`
+      + `<circle cx="${x}" cy="${y}" r="13" fill="none" stroke="#d97b3f" stroke-width="2"/>`
+      + `<text x="${x + 20}" y="${y - 12}" font-size="22" font-family="Spectral" fill="#d97b3f">${avg.toFixed(1)}</text>`
+      + `<text x="${x}" y="${VBH - PAD.b + 40}" text-anchor="middle" font-size="13" font-style="italic" fill="#d97b3f">you (21)</text>`;
+  }
+  document.getElementById('curve').innerHTML =
+    `<svg viewBox="0 0 ${VBW} ${VBH}" role="img" aria-label="Well-being by age curve">
+       ${grid}${xlab}
+       <text x="${PX(49)}" y="${VBH - 6}" text-anchor="middle" font-size="13" fill="#999">age</text>
+       <path d="${smoothPath(CURVE_OLD)}" fill="none" stroke="#999" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+       <path d="${smoothPath(CURVE_NEW)}" fill="none" stroke="#1a5f5e" stroke-width="3.5"/>
+       ${dot}
+     </svg>`;
+}
+
+/* =========================================================================
+   5. MAIN LOOP
+   ========================================================================= */
+let q4qualitative = false;
+let lastRows = null;
+
+async function refresh() {
+  setStatus('refreshing…');
+  try {
+    const { headers, rows } = await fetchRows();
+    lastRows = rows;
+    const col = resolveCols(headers);
+    document.getElementById('nResp').textContent = rows.length;
+
+    // Q1
+    const q1 = valuesFor(rows, col.q1).map(Number).filter(v => !isNaN(v));
+    const s1 = stats(q1);
+    document.getElementById('q1avg').innerHTML = s1.n ? s1.mean.toFixed(1) + ' <small>/10</small>' : '—';
+    document.getElementById('q1sd').textContent = s1.n ? '±' + s1.sd.toFixed(1) : '—';
+    renderCurve(s1.mean);
+    renderHist('q1hist', hist0to10(q1));
+
+    // Q3
+    const q3 = valuesFor(rows, col.q3).map(Number).filter(v => !isNaN(v));
+    const s3 = stats(q3);
+    document.getElementById('q3avg').innerHTML = s3.n ? s3.mean.toFixed(1) + ' <small>/10</small>' : '—';
+    document.getElementById('q3sd').textContent = s3.n ? '±' + s3.sd.toFixed(1) : '—';
+    renderHist('q3hist', hist0to10(q3));
+
+    // Q2 / Q4 / Q7
+    renderBars('q2bars', counts(valuesFor(rows, col.q2), Q.q2.order));
+    renderBars('q4bars', counts(valuesFor(rows, col.q4), Q.q4.order), { qualitative: q4qualitative });
+    renderBars('q7bars', counts(valuesFor(rows, col.q7), Q.q7.order));
+
+    // Q5 / Q6
+    renderCloud('q5cloud', wordFreq(valuesFor(rows, col.q5)));
+    renderCloud('q6cloud', wordFreq(valuesFor(rows, col.q6)));
+
+    document.getElementById('updated').textContent = 'updated ' + nowStr();
+    setStatus('live', false);
+  } catch (e) {
+    console.error(e);
+    setStatus('error: ' + e.message + ' — check CONFIG / sheet sharing (see SURVEY_SETUP.md)', true);
+  }
+}
+
+function setStatus(msg, err) {
+  const el = document.getElementById('status');
+  el.textContent = msg; el.className = 'status' + (err ? ' err' : '');
+}
+// Date.now()-free helpers (page runs in a real browser, so performance.now is fine)
+function tick() { return Math.floor(performance.now()); }
+function nowStr() { const d = new Date(); return d.toLocaleTimeString(); }
+
+/* ---- controls ---- */
+let auto = true, timer = null;
+function loop() { clearTimeout(timer); if (auto) timer = setTimeout(() => { refresh().finally(loop); }, CONFIG.pollSeconds * 1000); }
+
+document.querySelectorAll('.reveal-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const card = btn.closest('.card');
+    card.classList.toggle('hidden');
+    btn.textContent = card.classList.contains('hidden') ? 'Reveal' : 'Hide';
+  });
+});
+document.getElementById('btnAll').onclick = () => document.querySelectorAll('.card').forEach(c => {
+  c.classList.remove('hidden'); c.querySelector('.reveal-toggle').textContent = 'Hide';
+});
+document.getElementById('btnNone').onclick = () => document.querySelectorAll('.card').forEach(c => {
+  c.classList.add('hidden'); c.querySelector('.reveal-toggle').textContent = 'Reveal';
+});
+document.getElementById('btnAuto').onclick = (e) => {
+  auto = !auto; e.target.textContent = 'Auto-refresh: ' + (auto ? 'on' : 'off');
+  e.target.classList.toggle('on', auto); loop();
+};
+document.getElementById('btnRefresh').onclick = () => refresh();
+document.getElementById('q4mode').onclick = (e) => {
+  q4qualitative = !q4qualitative;
+  e.target.textContent = 'Mode: ' + (q4qualitative ? 'qualitative' : 'numbers');
+  refresh();
+};
+
+// boot
+refresh().finally(loop);
+</script>
+</body>
+</html>
