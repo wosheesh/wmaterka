@@ -213,22 +213,6 @@ const CONFIG = {
     <div class="body"><div class="cloud" id="q6cloud"></div></div>
   </section>
 
-  <!-- Q3 — worthwhile -->
-  <section class="card hidden" data-card="q3">
-    <div class="head">
-      <span class="qid">Q3</span>
-      <h2>To what extent do the things you do feel <em>worthwhile</em>?</h2>
-      <button class="btn reveal-toggle">Reveal</button>
-    </div>
-    <div class="body">
-      <div class="metricrow">
-        <div class="metric"><div class="lbl">Average</div><div class="bignum" id="q3avg">—</div></div>
-        <div class="metric"><div class="lbl">Spread</div><div class="bignum" id="q3sd" style="font-size:2.2rem">—</div></div>
-      </div>
-      <div class="hist" id="q3hist"></div>
-    </div>
-  </section>
-
   <!-- Q2 — generational reversal -->
   <section class="card hidden" data-card="q2">
     <div class="head">
@@ -261,15 +245,14 @@ const CONFIG = {
    ========================================================================= */
 // NOTE: columns are resolved by keyword `match` first, so the dashboard keeps
 // working even if a question is added/removed and column positions shift.
-// `idx` is only a positional fallback (reflects the form with Q4 removed).
+// `idx` is only a positional fallback (reflects the form with Q3 & Q4 removed).
 const Q = {
   q1: { kind: 'scale',  match: 'rung',                idx: 1 },
   q2: { kind: 'cat',    match: 'parents',             idx: 2,
         order: ['Much better','Somewhat better','About the same','Somewhat worse','Much worse'] },
-  q3: { kind: 'scale',  match: 'worthwhile',          idx: 3 },
-  q5: { kind: 'words',  match: 'still looking',       idx: 4 },
-  q6: { kind: 'words',  match: 'older generations',   idx: 5 },
-  q7: { kind: 'cat',    match: 'worries you most',    idx: 6,
+  q5: { kind: 'words',  match: 'still looking',       idx: 3 },
+  q6: { kind: 'words',  match: 'older generations',   idx: 4 },
+  q7: { kind: 'cat',    match: 'worries you most',    idx: 5,
         order: ['Cost of living & housing','AI & the job market','Climate & the environment',
                 'Burnout & mental health','Political instability'] },
 };
@@ -473,13 +456,6 @@ async function refresh() {
     document.getElementById('q1sd').textContent = s1.n ? '±' + s1.sd.toFixed(1) : '—';
     renderCurve(s1.mean);
     renderHist('q1hist', hist0to10(q1));
-
-    // Q3
-    const q3 = valuesFor(rows, col.q3).map(Number).filter(v => !isNaN(v));
-    const s3 = stats(q3);
-    document.getElementById('q3avg').innerHTML = s3.n ? s3.mean.toFixed(1) + ' <small>/10</small>' : '—';
-    document.getElementById('q3sd').textContent = s3.n ? '±' + s3.sd.toFixed(1) : '—';
-    renderHist('q3hist', hist0to10(q3));
 
     // Q2 / Q7
     renderBars('q2bars', counts(valuesFor(rows, col.q2), Q.q2.order));
