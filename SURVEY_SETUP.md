@@ -31,7 +31,6 @@ job and the *visualisation* is ours. You only ever edit one config block.
 | Q1 | **Linear scale** | "Picture a ladder… which **rung** are you standing on today?" | 0 to 10 (label 0 = "worst possible life", 10 = "best possible life") |
 | Q2 | Multiple choice | "Do you expect your life to turn out better than your **parents**' lives?" | Much better / Somewhat better / About the same / Somewhat worse / Much worse |
 | Q3 | **Linear scale** | "To what extent do the things you do feel **worthwhile**?" | 0 to 10 |
-| Q4 | Multiple choice | "In the last two weeks, how often have you felt **lonely**?" | Never / Rarely / Some of the time / Often / Almost always |
 | Q5 | Short answer | "In one word: what are you **still looking** for?" | (free text) |
 | Q6 | Short answer | "What do you wish **older generations** understood about you?" | (free text) |
 | Q7 | Multiple choice | "What **worries you most** about the world you're stepping into?" | Cost of living & housing / AI & the job market / Climate & the environment / Burnout & mental health / Political instability |
@@ -118,8 +117,7 @@ Generate the QR with any tool, or drop the link into your slide deck's QR genera
 - All cards start **hidden** behind a hatched panel. The response counter is always
   visible (builds anticipation). Click **Reveal** on a card to show it on screen.
 - **Opening (day 1):** reveal **Q1** (the dot on the curve) and **Q5** (word cloud).
-  Hold back **Q6** for the close. Keep **Q4** hidden, or reveal it and click
-  **"Mode: qualitative"** to hide exact numbers if the room feels fragile.
+  Hold back **Q6** for the close.
 - **Closing (day 2):** reveal **Q6** and answer it from your side. If you re-polled
   Q1, compare the two dots.
 - **Reveal all / Hide all** are in the top bar; **Auto-refresh** can be paused so the

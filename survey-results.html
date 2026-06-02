@@ -239,20 +239,6 @@ const CONFIG = {
     <div class="body"><div class="bars diverging" id="q2bars"></div></div>
   </section>
 
-  <!-- Q4 — loneliness (duty of care) -->
-  <section class="card hidden" data-card="q4">
-    <div class="head">
-      <span class="qid">Q4</span>
-      <h2>In the last two weeks, how often have you felt <em>lonely</em>?</h2>
-      <button class="btn reveal-toggle">Reveal</button>
-    </div>
-    <div class="body">
-      <button class="btn" id="q4mode" style="margin-bottom:1rem">Mode: numbers</button>
-      <div class="bars" id="q4bars"></div>
-      <p class="note">Duty of care: if the room feels fragile, switch to qualitative mode — it hides exact counts and describes the shape gently instead.</p>
-    </div>
-  </section>
-
   <!-- Q7 — what weighs on you -->
   <section class="card hidden" data-card="q7">
     <div class="head">
@@ -273,16 +259,17 @@ const CONFIG = {
    which Google Forms sets to the full question text. `idx` is a positional
    fallback (0 = Timestamp). Edit `match` only if you reworded a question.
    ========================================================================= */
+// NOTE: columns are resolved by keyword `match` first, so the dashboard keeps
+// working even if a question is added/removed and column positions shift.
+// `idx` is only a positional fallback (reflects the form with Q4 removed).
 const Q = {
   q1: { kind: 'scale',  match: 'rung',                idx: 1 },
   q2: { kind: 'cat',    match: 'parents',             idx: 2,
         order: ['Much better','Somewhat better','About the same','Somewhat worse','Much worse'] },
   q3: { kind: 'scale',  match: 'worthwhile',          idx: 3 },
-  q4: { kind: 'cat',    match: 'lonely',              idx: 4,
-        order: ['Never','Rarely','Some of the time','Often','Almost always'] },
-  q5: { kind: 'words',  match: 'still looking',       idx: 5 },
-  q6: { kind: 'words',  match: 'older generations',   idx: 6 },
-  q7: { kind: 'cat',    match: 'worries you most',    idx: 7,
+  q5: { kind: 'words',  match: 'still looking',       idx: 4 },
+  q6: { kind: 'words',  match: 'older generations',   idx: 5 },
+  q7: { kind: 'cat',    match: 'worries you most',    idx: 6,
         order: ['Cost of living & housing','AI & the job market','Climate & the environment',
                 'Burnout & mental health','Political instability'] },
 };
@@ -469,7 +456,6 @@ function renderCurve(avg) {
 /* =========================================================================
    5. MAIN LOOP
    ========================================================================= */
-let q4qualitative = false;
 let lastRows = null;
 
 async function refresh() {
@@ -495,9 +481,8 @@ async function refresh() {
     document.getElementById('q3sd').textContent = s3.n ? '±' + s3.sd.toFixed(1) : '—';
     renderHist('q3hist', hist0to10(q3));
 
-    // Q2 / Q4 / Q7
+    // Q2 / Q7
     renderBars('q2bars', counts(valuesFor(rows, col.q2), Q.q2.order));
-    renderBars('q4bars', counts(valuesFor(rows, col.q4), Q.q4.order), { qualitative: q4qualitative });
     renderBars('q7bars', counts(valuesFor(rows, col.q7), Q.q7.order));
 
     // Q5 / Q6
@@ -542,11 +527,6 @@ document.getElementById('btnAuto').onclick = (e) => {
   e.target.classList.toggle('on', auto); loop();
 };
 document.getElementById('btnRefresh').onclick = () => refresh();
-document.getElementById('q4mode').onclick = (e) => {
-  q4qualitative = !q4qualitative;
-  e.target.textContent = 'Mode: ' + (q4qualitative ? 'qualitative' : 'numbers');
-  refresh();
-};
 
 // boot
 refresh().finally(loop);
