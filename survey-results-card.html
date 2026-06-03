@@ -4,6 +4,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -15,6 +16,7 @@
     width:1600px; height:900px; background:#fff; overflow:hidden;
     font-family:'Source Sans 3',Helvetica,Arial,sans-serif; color:var(--ink);
     padding:46px 54px; position:relative;
+    display:flex; flex-direction:column;
   }
   h1,h2,h3{font-family:'Spectral',Georgia,serif;font-weight:400;line-height:1.15;}
   em{font-style:italic;}
@@ -25,9 +27,9 @@
   .insight{background:var(--accent);color:#fff;font-family:'Spectral',serif;font-size:21px;
            padding:12px 20px;border-radius:10px;margin:14px 0 16px;line-height:1.3;}
   .insight b{color:var(--bright);font-weight:600;}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;height:618px;}
-  .col{display:flex;flex-direction:column;gap:14px;}
-  .panel{border:1px solid var(--line);border-radius:12px;padding:12px 18px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;flex:1;min-height:0;}
+  .col{display:flex;flex-direction:column;gap:10px;min-height:0;}
+  .panel{border:1px solid var(--line);border-radius:12px;padding:10px 18px;}
   .panel .lbl{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
   .panel h3{font-size:18px;margin:1px 0 7px;}
   .headline{font-family:'Spectral',serif;font-style:italic;color:var(--accent);font-size:15px;margin-top:6px;}
@@ -36,26 +38,45 @@
   .big{font-family:'Spectral',serif;font-size:60px;color:var(--accent);line-height:.9;}
   .big small{font-size:20px;color:var(--muted);font-style:italic;}
   .q1meta{font-size:14px;color:var(--muted);line-height:1.45;}
-  .hist{display:flex;align-items:flex-end;gap:5px;height:80px;flex:1;}
+  .hist{display:flex;align-items:flex-end;gap:5px;height:62px;flex:1;}
   .hist .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;height:100%;}
   .hist .c .b{width:100%;background:var(--bright);border-radius:3px 3px 0 0;min-height:2px;}
   .hist .c .x{font-size:12px;color:var(--muted);}
   .hist .c.peak .b{background:var(--accent);}
 
-  .bars .row{display:grid;grid-template-columns:178px 1fr 40px;align-items:center;gap:10px;margin:4px 0;}
-  .bars .cl{font-size:14px;text-align:right;color:var(--ink);}
-  .bars .track{background:#f0f0f0;border-radius:5px;height:18px;overflow:hidden;}
+  .bars .row{display:grid;grid-template-columns:178px 1fr 40px;align-items:center;gap:10px;margin:3px 0;}
+  .bars .cl{font-size:13.5px;text-align:right;color:var(--ink);}
+  .bars .track{background:#f0f0f0;border-radius:5px;height:16px;overflow:hidden;}
   .bars .fill{height:100%;background:var(--accent);border-radius:5px;min-width:2px;}
   .bars .pc{font-size:13.5px;color:var(--muted);}
   .bars.warm .fill{background:var(--warm);}
   .bars.bright .fill{background:linear-gradient(90deg,var(--accent),var(--bright));}
 
-  .quotes{border-top:1px solid var(--line);padding-top:10px;margin-top:auto;}
-  .quotes .q{font-family:'Spectral',serif;font-style:italic;font-size:15px;color:var(--ink);margin:5px 0;line-height:1.3;}
-  .quotes .q::before{content:"“";color:var(--warm);font-size:20px;}
-  .quotes .q::after{content:"”";color:var(--warm);font-size:20px;}
-  .foot{position:absolute;bottom:18px;left:54px;right:54px;display:flex;justify-content:space-between;
+  .quotes{border-top:1px solid var(--line);padding-top:8px;margin-top:auto;}
+  .quotes .q{font-family:'Spectral',serif;font-style:italic;font-size:14px;color:var(--ink);margin:4px 0;line-height:1.3;}
+  .quotes .q::before{content:"“";color:var(--warm);font-size:19px;}
+  .quotes .q::after{content:"”";color:var(--warm);font-size:19px;}
+  .foot{display:flex;justify-content:space-between;gap:12px;margin-top:12px;
         font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;}
+
+  /* --- mobile / narrow screens: reflow to a single readable column --- */
+  @media (max-width:1024px){
+    body{background:#fff;}
+    .card{width:100%; height:auto; min-height:0; overflow:visible; padding:22px 16px; display:block;}
+    .top{flex-direction:column; align-items:flex-start; gap:4px;}
+    .top h1{font-size:26px;} .top .sub{font-size:14px;} .top .n{text-align:left;font-size:14px;}
+    .insight{font-size:16px; padding:12px 14px; margin:14px 0;}
+    .grid{grid-template-columns:1fr; gap:16px; height:auto;}
+    .col{gap:16px;}
+    .panel h3{font-size:17px;}
+    .q1row{flex-wrap:wrap; gap:14px;}
+    .hist{height:64px; flex:1 1 100%; order:3;}
+    /* stack each bar: label on its own line, then track + % below */
+    .bars .row{grid-template-columns:1fr 44px; column-gap:10px; row-gap:2px; margin:8px 0;}
+    .bars .cl{grid-column:1/3; text-align:left; font-size:14px;}
+    .bars .track{height:20px;}
+    .foot{flex-direction:column; gap:4px;}
+  }
 </style>
 </head>
 <body>
