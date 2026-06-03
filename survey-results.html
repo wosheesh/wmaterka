@@ -200,7 +200,11 @@ const CONFIG = {
       <h2>In one word: what are you <em>still looking for</em>?</h2>
       <button class="btn reveal-toggle">Reveal</button>
     </div>
-    <div class="body"><div class="cloud" id="q5cloud"></div></div>
+    <div class="body">
+      <div class="bars" id="q5themes"></div>
+      <p class="note">Themes (auto-grouped). Raw words below.</p>
+      <div class="cloud" id="q5cloud"></div>
+    </div>
   </section>
 
   <!-- Q6 — what you wish older generations understood (held for the close) -->
@@ -210,7 +214,11 @@ const CONFIG = {
       <h2>What do you wish <em>older generations</em> understood about you?</h2>
       <button class="btn reveal-toggle">Reveal</button>
     </div>
-    <div class="body"><div class="cloud" id="q6cloud"></div></div>
+    <div class="body">
+      <div class="bars" id="q6themes"></div>
+      <p class="note">Themes (auto-grouped). Raw words below.</p>
+      <div class="cloud" id="q6cloud"></div>
+    </div>
   </section>
 
   <!-- Q2 — generational reversal -->
@@ -256,6 +264,34 @@ const Q = {
         order: ['Cost of living & housing','AI & the job market','Climate & the environment',
                 'Burnout & mental health','Political instability'] },
 };
+
+// Open-text answers came as sentences, not single words — so we auto-group them
+// into themes (first matching rule wins) instead of relying only on a word cloud.
+const THEMES = {
+  q5: [
+    ['Purpose & meaning',          /purpose|fulfil|meaning|impact|ideals|service|satisf|passion|look back|startup|aha|gap|mean more/i],
+    ['Stability & security',       /stabil|security|secure|certain|peace|calm|clear future|future|house/i],
+    ['Confidence & recognition',   /confiden|validation|recogni|accept|wisdom|learning|growth/i],
+    ['A job / career',             /\bjob\b|career|internship|position|profession|industry|employ|skills/i],
+    ['Freedom & independence',     /freedom|independ|financ|money|free\b/i],
+    ['Relationships & connection', /partner|relationship|connection|\blove\b|network|social|home/i],
+    ['Happiness & balance',        /happ|balance|excite|time\b/i],
+  ],
+  q6: [
+    ["We're capable & driven",            /drive|ambition|capable|competen|talent|motivat|hard.?work|persist|potential|reliab|disruptor|thrive|savvy|passion|efficiency|trying/i],
+    ['Our character & values',            /perspective|complex|intention|kindness|nice|loving|carefree|pessimist|happiness|restricted|understanding|didn.t know|explore/i],
+    ['Under pressure & stress',           /stress|pressure|anxiet|mental|fatigue|paralysis|juggl|debilitat|illness/i],
+    ['A fundamentally different world',   /different|job market|need a job|not as easy|aren.t as easy|realit|world from theirs|approach required/i],
+    ['Autonomy & respect',                /respect|freedom|\bfree\b|persuad|we are people|choice|cultures/i],
+    ['Resilient & adaptable',             /resilien|adapt|flexib/i],
+    ['Disengaged / nothing',              /^nothing|^not sure|^no idea|^-$|not a lot/i],
+  ],
+};
+function themeCounts(vals, rules) {
+  const c = rules.map(([label]) => ({ label, n: 0 }));
+  vals.forEach(v => { const i = rules.findIndex(([, re]) => re.test(v)); if (i >= 0) c[i].n++; });
+  return c.sort((a, b) => b.n - a.n).filter(t => t.n > 0);
+}
 
 /* =========================================================================
    2. FETCH + PARSE  (handles both gviz-JSON and published-CSV)
@@ -461,9 +497,12 @@ async function refresh() {
     renderBars('q2bars', counts(valuesFor(rows, col.q2), Q.q2.order));
     renderBars('q7bars', counts(valuesFor(rows, col.q7), Q.q7.order));
 
-    // Q5 / Q6
-    renderCloud('q5cloud', wordFreq(valuesFor(rows, col.q5)));
-    renderCloud('q6cloud', wordFreq(valuesFor(rows, col.q6)));
+    // Q5 / Q6 — themes first (sentences don't word-cloud well), raw words below
+    const q5vals = valuesFor(rows, col.q5), q6vals = valuesFor(rows, col.q6);
+    renderBars('q5themes', themeCounts(q5vals, THEMES.q5));
+    renderBars('q6themes', themeCounts(q6vals, THEMES.q6));
+    renderCloud('q5cloud', wordFreq(q5vals));
+    renderCloud('q6cloud', wordFreq(q6vals));
 
     document.getElementById('updated').textContent = 'updated ' + nowStr();
     setStatus('live', false);

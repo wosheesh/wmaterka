@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!-- Day-2 results card. Static snapshot for a slide. Render to PNG/PDF with
+     headless Chrome. Data hardcoded from the day-1 cohort (n=69). -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  @page{ size:1600px 900px; margin:0; }
+  :root{ --accent:#1a5f5e; --bright:#3dd5d1; --warm:#d97b3f; --muted:#7a7a7a; --ink:#1a1a1a; --line:rgba(0,0,0,.09); }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#e9e9e9;}
+  .card{
+    width:1600px; height:900px; background:#fff; overflow:hidden;
+    font-family:'Source Sans 3',Helvetica,Arial,sans-serif; color:var(--ink);
+    padding:46px 54px; position:relative;
+  }
+  h1,h2,h3{font-family:'Spectral',Georgia,serif;font-weight:400;line-height:1.15;}
+  em{font-style:italic;}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--accent);padding-bottom:14px;}
+  .top h1{font-size:37px;}
+  .top .sub{color:var(--muted);font-size:17px;margin-top:3px;}
+  .top .n{font-family:'Spectral',serif;font-size:17px;color:var(--accent);text-align:right;}
+  .insight{background:var(--accent);color:#fff;font-family:'Spectral',serif;font-size:21px;
+           padding:12px 20px;border-radius:10px;margin:14px 0 16px;line-height:1.3;}
+  .insight b{color:var(--bright);font-weight:600;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;height:618px;}
+  .col{display:flex;flex-direction:column;gap:14px;}
+  .panel{border:1px solid var(--line);border-radius:12px;padding:12px 18px;}
+  .panel .lbl{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+  .panel h3{font-size:18px;margin:1px 0 7px;}
+  .headline{font-family:'Spectral',serif;font-style:italic;color:var(--accent);font-size:15px;margin-top:6px;}
+
+  .q1row{display:flex;align-items:center;gap:22px;}
+  .big{font-family:'Spectral',serif;font-size:60px;color:var(--accent);line-height:.9;}
+  .big small{font-size:20px;color:var(--muted);font-style:italic;}
+  .q1meta{font-size:14px;color:var(--muted);line-height:1.45;}
+  .hist{display:flex;align-items:flex-end;gap:5px;height:80px;flex:1;}
+  .hist .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;height:100%;}
+  .hist .c .b{width:100%;background:var(--bright);border-radius:3px 3px 0 0;min-height:2px;}
+  .hist .c .x{font-size:12px;color:var(--muted);}
+  .hist .c.peak .b{background:var(--accent);}
+
+  .bars .row{display:grid;grid-template-columns:178px 1fr 40px;align-items:center;gap:10px;margin:4px 0;}
+  .bars .cl{font-size:14px;text-align:right;color:var(--ink);}
+  .bars .track{background:#f0f0f0;border-radius:5px;height:18px;overflow:hidden;}
+  .bars .fill{height:100%;background:var(--accent);border-radius:5px;min-width:2px;}
+  .bars .pc{font-size:13.5px;color:var(--muted);}
+  .bars.warm .fill{background:var(--warm);}
+  .bars.bright .fill{background:linear-gradient(90deg,var(--accent),var(--bright));}
+
+  .quotes{border-top:1px solid var(--line);padding-top:10px;margin-top:auto;}
+  .quotes .q{font-family:'Spectral',serif;font-style:italic;font-size:15px;color:var(--ink);margin:5px 0;line-height:1.3;}
+  .quotes .q::before{content:"“";color:var(--warm);font-size:20px;}
+  .quotes .q::after{content:"”";color:var(--warm);font-size:20px;}
+  .foot{position:absolute;bottom:18px;left:54px;right:54px;display:flex;justify-content:space-between;
+        font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="top">
+    <div>
+      <h1>Where the room actually <em>sits</em></h1>
+      <div class="sub">"Where Are You on the Curve?" — live cohort survey · Day 1</div>
+    </div>
+    <div class="n">n = 69 anonymous responses<br>MiM cohort</div>
+  </div>
+
+  <div class="insight">
+    Confident and <b>upwardly optimistic</b> — not the struggling generation the headlines describe.
+    But the optimism sits in the shadow of one sharp fear: <b>AI &amp; the job market</b>.
+  </div>
+
+  <div class="grid">
+    <!-- LEFT -->
+    <div class="col">
+      <div class="panel">
+        <div class="lbl">Q1 · The ladder today (0–10)</div>
+        <h3>"Which rung are you standing on?"</h3>
+        <div class="q1row">
+          <div class="big">7.1<small> /10</small></div>
+          <div class="q1meta">median <b>7</b><br>spread ±1.5<br>range 3–10</div>
+          <div class="hist" id="hist"></div>
+        </div>
+        <div class="headline">The room sits at 7 — <b>above</b> the typical young-adult level, not below it.</div>
+      </div>
+
+      <div class="panel">
+        <div class="lbl">Q2 · Versus your parents' lives</div>
+        <h3>"Will your life turn out better?"</h3>
+        <div class="bars bright" id="q2"></div>
+        <div class="headline">68% expect <b>better</b>. The "generational reversal" doesn't hold in this room.</div>
+      </div>
+
+      <div class="panel">
+        <div class="lbl">Q7 · What worries you most</div>
+        <div class="bars warm" id="q7"></div>
+        <div class="headline">AI &amp; jobs dominate (39%) — cost of living is far lower than the public narrative.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col">
+      <div class="panel">
+        <div class="lbl">Q5 · What they're still looking for — themes</div>
+        <div class="bars" id="q5"></div>
+        <div class="headline">Searching for <b>meaning and security at once</b> — and, concretely, a job.</div>
+      </div>
+
+      <div class="panel" style="flex:1;display:flex;flex-direction:column;">
+        <div class="lbl">Q6 · What they wish older generations understood — themes</div>
+        <div class="bars" id="q6"></div>
+        <div class="quotes">
+          <div class="q">We're at least as capable as them</div>
+          <div class="q">This is a fundamentally different world from theirs</div>
+          <div class="q">Time efficiency isn't lack of trying</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Anonymous · self-reported · a mirror to start a conversation, not a diagnosis</span>
+    <span>wmaterka.com</span>
+  </div>
+</div>
+
+<script>
+const HIST=[0,0,0,1,3,8,6,24,14,11,2];
+const Q2=[['Much better',12],['Somewhat better',35],['About the same',12],['Somewhat worse',9],['Much worse',1]];
+const Q7=[['AI & the job market',26],['Burnout & mental health',12],['Political instability',10],['Cost of living & housing',9],['Climate & the environment',7],['Other (write-in)',3]];
+const Q5=[['Purpose & meaning',16],['Stability & security',15],['Confidence & recognition',10],['A job / career',8],['Freedom & independence',5],['Relationships & connection',4]];
+const Q6=[["We're capable & driven",18],['Our character & values',12],['Under pressure & stress',11],['A different world',5],['Disengaged / "nothing"',5],['Autonomy & respect',4]];
+
+const peak=HIST.indexOf(Math.max(...HIST));
+const maxH=Math.max(...HIST);
+document.getElementById('hist').innerHTML=HIST.map((n,i)=>
+  `<div class="c ${i===peak?'peak':''}"><div class="b" style="height:${(n/maxH)*100}%"></div><div class="x">${i}</div></div>`).join('');
+
+function bars(id,data,total){
+  const t=total||data.reduce((a,d)=>a+d[1],0);
+  document.getElementById(id).innerHTML=data.map(([l,n])=>{
+    const pc=Math.round(n/t*100);
+    return `<div class="row"><div class="cl">${l}</div><div class="track"><div class="fill" style="width:${n/t*100}%"></div></div><div class="pc">${pc}%</div></div>`;
+  }).join('');
+}
+bars('q2',Q2,69); bars('q7',Q7,67); bars('q5',Q5,63); bars('q6',Q6,58);
+document.title='ready';
+</script>
+</body>
+</html>
